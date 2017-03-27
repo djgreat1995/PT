@@ -37,7 +37,16 @@ namespace SFR
             InitializeComponent();
         }
 
-
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            capture = new Capture();
+            string link = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            haarCascade = new CascadeClassifier(link + "/haarcascade_frontalface_default.xml");
+            timer = new DispatcherTimer();
+            timer.Tick += new EventHandler(timer_Tick);
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
+            timer.Start();
+        }
 
 
 
