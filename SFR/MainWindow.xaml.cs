@@ -48,7 +48,20 @@ namespace SFR
             timer.Start();
         }
 
-
+        void timer_Tick(object sender, EventArgs e)
+        {
+            using (var currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>())
+            {
+                if (currentFrame != null)
+                {
+                    var grayFrame = currentFrame.Convert<Gray, byte>();
+                    var faces = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty);
+                    foreach (var face in faces)
+                        currentFrame.Draw(face, new Bgr(System.Drawing.Color.DarkBlue), 3);
+                }
+                image.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(currentFrame);
+            }
+        }
 
 
     }
