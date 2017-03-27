@@ -50,3 +50,29 @@ C:\Users\patry\Documents\Visual Studio 2017\Projects\SFR\SFR\obj\x64\Debug\SFR.P
 C:\Users\patry\Documents\Visual Studio 2017\Projects\SFR\SFR\obj\x64\Debug\SFR.csproj.GenerateResource.Cache
 C:\Users\patry\Documents\Visual Studio 2017\Projects\SFR\SFR\obj\x64\Debug\SFR.exe
 C:\Users\patry\Documents\Visual Studio 2017\Projects\SFR\SFR\obj\x64\Debug\SFR.pdb
+B:\PT\SFR\bin\x64\Debug\SFR.exe.config
+B:\PT\SFR\obj\x64\Debug\SFR.exe
+B:\PT\SFR\obj\x64\Debug\SFR.pdb
+B:\PT\SFR\bin\x64\Debug\cvextern.dll
+B:\PT\SFR\bin\x64\Debug\msvcp120.dll
+B:\PT\SFR\bin\x64\Debug\msvcr120.dll
+B:\PT\SFR\bin\x64\Debug\opencv_ffmpeg300_64.dll
+B:\PT\SFR\bin\x64\Debug\SFR.exe
+B:\PT\SFR\bin\x64\Debug\SFR.pdb
+B:\PT\SFR\bin\x64\Debug\Emgu.CV.dll
+B:\PT\SFR\bin\x64\Debug\Emgu.CV.UI.dll
+B:\PT\SFR\bin\x64\Debug\Emgu.Util.dll
+B:\PT\SFR\bin\x64\Debug\ZedGraph.dll
+B:\PT\SFR\bin\x64\Debug\Emgu.CV.xml
+B:\PT\SFR\bin\x64\Debug\Emgu.CV.UI.xml
+B:\PT\SFR\bin\x64\Debug\Emgu.Util.xml
+B:\PT\SFR\obj\x64\Debug\SFR.csprojResolveAssemblyReference.cache
+B:\PT\SFR\obj\x64\Debug\MainWindow.g.cs
+B:\PT\SFR\obj\x64\Debug\App.g.cs
+B:\PT\SFR\obj\x64\Debug\SFR_Content.g.cs
+B:\PT\SFR\obj\x64\Debug\SFR_MarkupCompile.cache
+B:\PT\SFR\obj\x64\Debug\SFR_MarkupCompile.lref
+B:\PT\SFR\obj\x64\Debug\MainWindow.baml
+B:\PT\SFR\obj\x64\Debug\SFR.g.resources
+B:\PT\SFR\obj\x64\Debug\SFR.Properties.Resources.resources
+B:\PT\SFR\obj\x64\Debug\SFR.csproj.GenerateResource.Cache

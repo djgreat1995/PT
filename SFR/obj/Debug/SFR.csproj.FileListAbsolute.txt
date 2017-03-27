@@ -1,2 +1,27 @@
 C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\bin\Debug\SFR.exe.config
 B:\PT\SFR\bin\Debug\SFR.exe.config
+B:\PT\SFR\bin\Debug\cvextern.dll
+B:\PT\SFR\bin\Debug\msvcp120.dll
+B:\PT\SFR\bin\Debug\msvcr120.dll
+B:\PT\SFR\bin\Debug\opencv_ffmpeg300_64.dll
+B:\PT\SFR\bin\Debug\SFR.exe
+B:\PT\SFR\bin\Debug\SFR.pdb
+B:\PT\SFR\bin\Debug\Emgu.CV.dll
+B:\PT\SFR\bin\Debug\Emgu.CV.UI.dll
+B:\PT\SFR\bin\Debug\Emgu.Util.dll
+B:\PT\SFR\bin\Debug\ZedGraph.dll
+B:\PT\SFR\bin\Debug\Emgu.CV.xml
+B:\PT\SFR\bin\Debug\Emgu.CV.UI.xml
+B:\PT\SFR\bin\Debug\Emgu.Util.xml
+B:\PT\SFR\obj\Debug\SFR.csprojResolveAssemblyReference.cache
+B:\PT\SFR\obj\Debug\MainWindow.g.cs
+B:\PT\SFR\obj\Debug\App.g.cs
+B:\PT\SFR\obj\Debug\SFR_Content.g.cs
+B:\PT\SFR\obj\Debug\SFR_MarkupCompile.cache
+B:\PT\SFR\obj\Debug\SFR_MarkupCompile.lref
+B:\PT\SFR\obj\Debug\MainWindow.baml
+B:\PT\SFR\obj\Debug\SFR.g.resources
+B:\PT\SFR\obj\Debug\SFR.Properties.Resources.resources
+B:\PT\SFR\obj\Debug\SFR.csproj.GenerateResource.Cache
+B:\PT\SFR\obj\Debug\SFR.exe
+B:\PT\SFR\obj\Debug\SFR.pdb
