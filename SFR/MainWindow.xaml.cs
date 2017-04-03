@@ -28,9 +28,9 @@ namespace SFR
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Capture capture;
-        private CascadeClassifier haarCascade;
-        DispatcherTimer timer;
+        private Capture capture; //zmienna potrzebna do uzyskania kanału live z kamerki
+        private CascadeClassifier haarCascade; //zmienna detektora twarzy (przeszkolony na tysiacach ludzkich twarzy)
+        DispatcherTimer timer; 
 
         public MainWindow()
         {
@@ -41,10 +41,10 @@ namespace SFR
         {
             capture = new Capture();
             string link = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-            haarCascade = new CascadeClassifier(link + "/haarcascade_frontalface_default.xml");
+            haarCascade = new CascadeClassifier(link + "/haarcascade_frontalface_default.xml"); //zestaw danych generowany z pliku
             timer = new DispatcherTimer();
             timer.Tick += new EventHandler(timer_Tick);
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 1); //interwał 1 ms
             timer.Start();
         }
 
@@ -54,15 +54,20 @@ namespace SFR
             {
                 if (currentFrame != null)
                 {
-                    var grayFrame = currentFrame.Convert<Gray, byte>();
-                    var faces = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty);
+                    var grayFrame = currentFrame.Convert<Gray, byte>(); //konwertowanie do klatki w odcieniach szarości
+                    //Parametry metody DetectMultiScale: 
+                    //- grayscale image (grayFrame) - aktualny obrazek, z ktorego chcemy wykryc twarz.  
+                    //- scale factor (współczynnik skali) - musi być większy niż 1.0. Im bliżej do 1.0, tym więcej czasu
+                    //  zajmuje wykrycie twarzy, ale istnieje większa szansa, że znajdziemy twarz
+                    //- minimum number of nearest neighbors - im większa liczba, tym mniej otrzymamy fałszywych pozytywów
+                    //- max size (px) - pozostawic pusty 
+                    var faces = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty); //aktualna detekcja twarzy
                     foreach (var face in faces)
-                        currentFrame.Draw(face, new Bgr(System.Drawing.Color.DarkBlue), 3);
+                        currentFrame.Draw(face, new Bgr(System.Drawing.Color.DarkBlue), 3); //podswietlenie twarzy za pomocą box'a rysowanego dookoła niej
                 }
-                image.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(currentFrame);
+                image.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(currentFrame); //przekazanie obrazu na komponent Image
             }
         }
-
 
     }
 }

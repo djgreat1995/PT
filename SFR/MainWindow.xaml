@@ -8,7 +8,7 @@
         Title="MainWindow" Height="700"
         Width="900" Loaded="Window_Loaded">
     <Grid>
-        <Image x:Name="image" HorizontalAlignment="Left" Height="600" Margin="31,36,0,0" VerticalAlignment="Top" Width="800" Stretch="Fill"/>
+        <Image x:Name="image" HorizontalAlignment="Left" Height="261" Margin="31,36,0,0" VerticalAlignment="Top" Width="377" Stretch="Fill"/>
 
     </Grid>
 </Window>
