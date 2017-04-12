@@ -44,26 +44,6 @@ namespace SFR
             InitializeComponent();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                capture = new Capture();
-            }
-            catch(NullReferenceException exception)
-            {
-                MessageBox.Show(exception.Message);
-            }
-            
-            string link = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-            haarCascade = new CascadeClassifier(link + "/haarcascade_frontalface_default.xml"); //zestaw danych generowany z pliku
-            timer = new DispatcherTimer();
-            timer.Tick += new EventHandler(timer_Tick);
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 1); //interwał 1 ms
-            cameraInformation();
-            capture.FlipHorizontal = !capture.FlipHorizontal; //obrot widoku kamery w poziomie
-        }
-
         void timer_Tick(object sender, EventArgs e)
         {
             using (var currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>())
@@ -94,14 +74,34 @@ namespace SFR
         }
 
         private void captureButton_Click(object sender, RoutedEventArgs e)
-        { 
+        {
+            try
+            {
+                capture = new Capture();
+            }
+            catch (NullReferenceException exception)
+            {
+                MessageBox.Show(exception.Message);
+            }
+
+            string link = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            haarCascade = new CascadeClassifier(link + "/haarcascade_frontalface_default.xml"); //zestaw danych generowany z pliku
+            timer = new DispatcherTimer();
+            timer.Tick += new EventHandler(timer_Tick);
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 1); //interwał 1 ms
             timer.Start();
+            cameraInformation();
+            capture.FlipHorizontal = !capture.FlipHorizontal; //obrot widoku kamery w poziomie
         }
 
         private void stopCaptureButton_Click(object sender, RoutedEventArgs e)
         {
+            capture.Dispose();
             timer.Stop();
             image.Source = null;
+            richTextBox.Document.Blocks.Clear();
+            countFacesLabel.Content = "";
+
         }
 
         //Get camera information

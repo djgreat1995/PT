@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SFR"
         mc:Ignorable="d"
         Title="SFR" Height="484.877"
-        Width="900" Loaded="Window_Loaded">
+        Width="900">
     <Grid>
         <Image x:Name="image" HorizontalAlignment="Left" Height="261" Margin="31,32,0,0" VerticalAlignment="Top" Width="377" Stretch="Fill"/>
         <Button x:Name="startCaptureButton" Content="Start capturing" HorizontalAlignment="Left" Margin="31,332,0,0" VerticalAlignment="Top" Width="377" Height="35" Click="captureButton_Click"/>
