@@ -14,6 +14,23 @@
         <Label x:Name="numberOfFacesLabel" Content="Number of faces:
                " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="31,296,0,0" Width="146" FontSize="16"/>
         <Label x:Name="countFacesLabel" Content="" HorizontalAlignment="Left" Margin="169,296,0,0" VerticalAlignment="Top" Width="28" FontSize="16"/>
+        <RichTextBox x:Name="richTextBox" HorizontalAlignment="Left" Height="84" VerticalAlignment="Top" Width="364" Margin="492,332,0,0">
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text=""/>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+        <Slider x:Name="brightnessSlider" HorizontalAlignment="Left" Margin="498,171,0,0" VerticalAlignment="Top" Height="24" Width="172" Minimum="1" Maximum="100" ToolTip="Set brightness value" SmallChange="1" ValueChanged="brightnessSlider_ValueChanged"/>
+        <Label x:Name="label" Content="Brightness" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="498,145,0,0" ToolTip="Set brightness value"/>
+        <Label x:Name="brightnessLabel" Content="Waiting for capturing" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="568,145,0,0"/>
+        <Button x:Name="button" Content="Reset settings" HorizontalAlignment="Left" Margin="490,296,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
+        <Slider x:Name="contrastSlider" HorizontalAlignment="Left" Margin="498,219,0,0" VerticalAlignment="Top" Height="24" Width="172" Minimum="1" Maximum="100" ToolTip="Set contrast value" SmallChange="1" ValueChanged="contrastSlider_ValueChanged"/>
+        <Label x:Name="label1" Content="Contrast" HorizontalAlignment="Left" Margin="498,193,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="contrastLabel" Content="Waiting for capturing" HorizontalAlignment="Left" Margin="568,193,0,0" VerticalAlignment="Top"/>
+        <Slider x:Name="sharpnessSlider" HorizontalAlignment="Left" Margin="498,267,0,0" VerticalAlignment="Top" Height="24" Width="172" Minimum="1" Maximum="100" ToolTip="Set sharpness value" SmallChange="1" ValueChanged="sharpnessSlider_ValueChanged"/>
+        <Label x:Name="label3" Content="Sharpness" HorizontalAlignment="Left" Margin="498,241,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="sharpnessLabel" Content="Waiting for capturing" HorizontalAlignment="Left" Margin="568,241,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

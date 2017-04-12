@@ -76,3 +76,4 @@ B:\PT\SFR\obj\x64\Debug\MainWindow.baml
 B:\PT\SFR\obj\x64\Debug\SFR.g.resources
 B:\PT\SFR\obj\x64\Debug\SFR.Properties.Resources.resources
 B:\PT\SFR\obj\x64\Debug\SFR.csproj.GenerateResource.Cache
+B:\PT\SFR\bin\x64\Debug\DirectShowLib-2005.dll

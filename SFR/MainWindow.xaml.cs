@@ -21,6 +21,8 @@ using Emgu.Util;
 using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
 
+using DirectShowLib;
+
 namespace SFR
 {
     /// <summary>
@@ -31,7 +33,12 @@ namespace SFR
         private Capture capture; //zmienna potrzebna do uzyskania kanału live z kamerki
         private CascadeClassifier haarCascade; //zmienna detektora twarzy (przeszkolony na tysiacach ludzkich twarzy)
         DispatcherTimer timer;
-        
+        Video_Device[] webCams;
+        int cameraDevice = 0;
+        int brightnessStore = 0;
+        int contrastStore = 0;
+        int sharpnessStore = 0;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -53,7 +60,8 @@ namespace SFR
             timer = new DispatcherTimer();
             timer.Tick += new EventHandler(timer_Tick);
             timer.Interval = new TimeSpan(0, 0, 0, 0, 1); //interwał 1 ms
-                
+            cameraInformation();
+            capture.FlipHorizontal = !capture.FlipHorizontal; //obrot widoku kamery w poziomie
         }
 
         void timer_Tick(object sender, EventArgs e)
@@ -82,7 +90,7 @@ namespace SFR
                 }
                 image.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(currentFrame); //przekazanie obrazu na komponent Image
             }
-            
+            cameraSettings();
         }
 
         private void captureButton_Click(object sender, RoutedEventArgs e)
@@ -94,6 +102,56 @@ namespace SFR
         {
             timer.Stop();
             image.Source = null;
+        }
+
+        //Get camera information
+        private void cameraInformation()
+        {
+            DsDevice[] systemCameras = DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice);
+            webCams = new Video_Device[systemCameras.Length];
+            for (int i = 0; i < systemCameras.Length; i++)
+            {
+                webCams[i] = new Video_Device(i, systemCameras[i].Name, systemCameras[i].ClassID); //fill web cam array
+            }
+            richTextBox.AppendText("Camera name: "+webCams[cameraDevice].Device_Name +"\n\n");
+        }
+
+        private void cameraSettings()
+        {
+            brightnessStore = (int)brightnessSlider.Value;
+            contrastStore = (int)contrastSlider.Value;
+            sharpnessStore = (int)sharpnessSlider.Value;
+
+            brightnessLabel.Content = brightnessStore.ToString();
+            contrastLabel.Content = contrastStore.ToString();
+            sharpnessLabel.Content = sharpnessStore.ToString();
+
+            brightnessSlider.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Brightness);
+            contrastSlider.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Contrast);
+            sharpnessSlider.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Sharpness);
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            if (capture != null)
+            { 
+            }
+        }
+
+        private void brightnessSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            //brightnessLabel.Content = brightnessSlider.Value.ToString();
+            if (capture != null) capture.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.Brightness, brightnessSlider.Value);
+        }
+
+        private void contrastSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (capture != null) capture.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.Contrast, contrastSlider.Value);
+        }
+
+        private void sharpnessSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (capture != null) capture.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.Sharpness, sharpnessSlider.Value);
         }
     }
 }
