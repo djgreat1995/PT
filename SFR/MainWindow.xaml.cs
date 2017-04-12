@@ -96,12 +96,12 @@ namespace SFR
 
         private void stopCaptureButton_Click(object sender, RoutedEventArgs e)
         {
-            capture.Dispose();
+            countFacesLabel.Content = "";
+            richTextBox.Document.Blocks.Clear();
+            Reset_Cam_Settings_Click(null,null);
             timer.Stop();
             image.Source = null;
-            richTextBox.Document.Blocks.Clear();
-            countFacesLabel.Content = "";
-
+            capture.Dispose();
         }
 
         //Get camera information
@@ -118,13 +118,9 @@ namespace SFR
 
         private void cameraSettings()
         {
-            brightnessStore = (int)brightnessSlider.Value;
-            contrastStore = (int)contrastSlider.Value;
-            sharpnessStore = (int)sharpnessSlider.Value;
-
-            brightnessLabel.Content = brightnessStore.ToString();
-            contrastLabel.Content = contrastStore.ToString();
-            sharpnessLabel.Content = sharpnessStore.ToString();
+            brightnessLabel.Content = ((int)brightnessSlider.Value).ToString();
+            contrastLabel.Content = ((int)contrastSlider.Value).ToString();
+            sharpnessLabel.Content = ((int)sharpnessSlider.Value).ToString();
 
             brightnessSlider.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Brightness);
             contrastSlider.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Contrast);
@@ -134,13 +130,13 @@ namespace SFR
         private void button_Click(object sender, RoutedEventArgs e)
         {
             if (capture != null)
-            { 
+            {
+                Reset_Cam_Settings_Click(null, null);
             }
         }
 
         private void brightnessSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            //brightnessLabel.Content = brightnessSlider.Value.ToString();
             if (capture != null) capture.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.Brightness, brightnessSlider.Value);
         }
 
@@ -152,6 +148,31 @@ namespace SFR
         private void sharpnessSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (capture != null) capture.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.Sharpness, sharpnessSlider.Value);
+        }
+
+        private void RetrieveCaptureInformation()
+        {           
+           
+            brightnessSlider.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Brightness);  //Set the slider value
+            brightnessLabel.Content = brightnessSlider.Value.ToString(); //set the slider text
+       
+            contrastSlider.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Contrast);  //Set the slider value
+            contrastLabel.Content = contrastSlider.Value.ToString(); //set the slider text
+      
+            sharpnessSlider.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Sharpness);  //Set the slider value
+            sharpnessLabel.Content = sharpnessSlider.Value.ToString(); //set the slider text
+
+        }
+
+        private void Reset_Cam_Settings_Click(object sender, EventArgs e)
+        {
+            if (capture != null)
+            {
+                capture.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.Brightness, brightnessStore);
+                capture.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.Contrast, contrastStore);
+                capture.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.Sharpness, sharpnessStore);
+                RetrieveCaptureInformation();
+            }
         }
     }
 }
