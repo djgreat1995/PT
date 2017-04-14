@@ -22,6 +22,8 @@ using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
 
 using DirectShowLib;
+using System.IO;
+using Microsoft.Win32;
 
 namespace SFR
 {
@@ -38,6 +40,7 @@ namespace SFR
         int brightnessStore = 0;
         int contrastStore = 0;
         int sharpnessStore = 0;
+        bool isCapture = false;
 
         public MainWindow()
         {
@@ -75,6 +78,8 @@ namespace SFR
 
         private void captureButton_Click(object sender, RoutedEventArgs e)
         {
+            isCapture = true;
+
             try
             {
                 capture = new Capture();
@@ -102,6 +107,7 @@ namespace SFR
             timer.Stop();
             image.Source = null;
             capture.Dispose();
+            isCapture = false;
         }
 
         //Get camera information
@@ -172,6 +178,18 @@ namespace SFR
                 capture.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.Contrast, contrastStore);
                 capture.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.Sharpness, sharpnessStore);
                 RetrieveCaptureInformation();
+            }
+        }
+
+        //Pobranie klatki
+        private void takePhotoBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if(isCapture==true)
+            {
+                using (var currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>())
+                {
+                    imageBox.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(currentFrame);
+                }
             }
         }
     }
