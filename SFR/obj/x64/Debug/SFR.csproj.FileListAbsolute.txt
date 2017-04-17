@@ -103,3 +103,26 @@ C:\PT\SFR\obj\x64\Debug\SFR.Properties.Resources.resources
 C:\PT\SFR\obj\x64\Debug\SFR.csproj.GenerateResource.Cache
 C:\PT\SFR\obj\x64\Debug\SFR.exe
 C:\PT\SFR\obj\x64\Debug\SFR.pdb
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\bin\x64\Debug\SFR.exe.config
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\obj\x64\Debug\SFR.exe
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\obj\x64\Debug\SFR.pdb
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\bin\x64\Debug\cvextern.dll
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\bin\x64\Debug\msvcp120.dll
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\bin\x64\Debug\msvcr120.dll
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\bin\x64\Debug\opencv_ffmpeg300_64.dll
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\bin\x64\Debug\SFR.exe
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\bin\x64\Debug\SFR.pdb
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\bin\x64\Debug\ZedGraph.dll
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\bin\x64\Debug\Emgu.CV.xml
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\bin\x64\Debug\Emgu.CV.UI.xml
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\bin\x64\Debug\Emgu.Util.xml
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\obj\x64\Debug\SFR.csprojResolveAssemblyReference.cache
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\obj\x64\Debug\MainWindow.g.cs
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\obj\x64\Debug\App.g.cs
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\obj\x64\Debug\SFR_Content.g.cs
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\obj\x64\Debug\SFR_MarkupCompile.cache
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\obj\x64\Debug\SFR_MarkupCompile.lref
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\obj\x64\Debug\MainWindow.baml
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\obj\x64\Debug\SFR.g.resources
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\obj\x64\Debug\SFR.Properties.Resources.resources
+C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\obj\x64\Debug\SFR.csproj.GenerateResource.Cache

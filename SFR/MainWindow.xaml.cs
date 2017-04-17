@@ -192,5 +192,25 @@ namespace SFR
                 }
             }
         }
+
+        private void savePhoto_Click(object sender, RoutedEventArgs e)
+        {
+            Stream stream;
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Image files (*.png) |*.png";
+            sfd.FilterIndex = 2;
+            sfd.RestoreDirectory = true;
+
+            if (sfd.ShowDialog() == true)
+            {
+                if ((stream = sfd.OpenFile()) != null)
+                {
+                    var encoder = new PngBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create((BitmapSource)imageBox.Source));
+                    encoder.Save(stream);       
+                    stream.Close();
+                }
+            }
+        }
     }
 }
