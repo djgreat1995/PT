@@ -174,6 +174,7 @@ namespace SFR
         {
             if (capture != null)
             {
+                imageBox.Source = null;
                 capture.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.Brightness, brightnessStore);
                 capture.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.Contrast, contrastStore);
                 capture.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.Sharpness, sharpnessStore);
