@@ -126,3 +126,19 @@ C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\o
 C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\obj\x64\Debug\SFR.g.resources
 C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\obj\x64\Debug\SFR.Properties.Resources.resources
 C:\Users\Drygi\Desktop\SEMESTR VI\Podstawy Teleinformatyki\Repozytorium\PT\SFR\obj\x64\Debug\SFR.csproj.GenerateResource.Cache
+C:\PT\SFR\bin\x64\Debug\dll\x86\OpenCvSharpExtern.dll
+C:\PT\SFR\bin\x64\Debug\dll\x86\opencv_ffmpeg320.dll
+C:\PT\SFR\bin\x64\Debug\dll\x64\OpenCvSharpExtern.dll
+C:\PT\SFR\bin\x64\Debug\dll\x64\opencv_ffmpeg320_64.dll
+C:\PT\SFR\bin\x64\Debug\OpenCvSharp.Blob.dll
+C:\PT\SFR\bin\x64\Debug\OpenCvSharp.dll
+C:\PT\SFR\bin\x64\Debug\OpenCvSharp.Extensions.dll
+C:\PT\SFR\bin\x64\Debug\OpenCvSharp.UserInterface.dll
+C:\PT\SFR\bin\x64\Debug\OpenCvSharp.pdb
+C:\PT\SFR\bin\x64\Debug\OpenCvSharp.xml
+C:\PT\SFR\bin\x64\Debug\OpenCvSharp.Blob.pdb
+C:\PT\SFR\bin\x64\Debug\OpenCvSharp.Blob.xml
+C:\PT\SFR\bin\x64\Debug\OpenCvSharp.Extensions.pdb
+C:\PT\SFR\bin\x64\Debug\OpenCvSharp.Extensions.xml
+C:\PT\SFR\bin\x64\Debug\OpenCvSharp.UserInterface.pdb
+C:\PT\SFR\bin\x64\Debug\OpenCvSharp.UserInterface.xml

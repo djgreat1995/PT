@@ -33,8 +33,10 @@
         <Label x:Name="sharpnessLabel" Content="Waiting for capturing..." HorizontalAlignment="Left" Margin="568,241,0,0" VerticalAlignment="Top"/>
         <Button x:Name="takePhotoBtn" Content="Take photo" HorizontalAlignment="Left" Margin="802,295,0,0" VerticalAlignment="Top" Width="80" Click="takePhotoBtn_Click"/>
         <Image x:Name="imageBox" HorizontalAlignment="Left" Height="124" Margin="762,145,0,0" VerticalAlignment="Top" Width="130"/>
-        <Button x:Name="savePhoto" Content="Save photo" HorizontalAlignment="Left" Margin="650,295,0,0" VerticalAlignment="Top" Width="80" Click="savePhoto_Click"/>
+        <Button x:Name="savePhoto" Content="Save photo" HorizontalAlignment="Left" Margin="756,83,0,0" VerticalAlignment="Top" Width="96" Click="savePhoto_Click" RenderTransformOrigin="1.425,-6.25"/>
         <Label x:Name="capturedPhoto" Content="Captured Photo:" HorizontalAlignment="Left" Margin="756,114,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="nameTextBox" HorizontalAlignment="Left" Height="23" Margin="498,83,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" RenderTransformOrigin="0.133,0.565"/>
+        <Label x:Name="nameLabel" Content="Student's name:" HorizontalAlignment="Left" Margin="492,52,0,0" VerticalAlignment="Top" Width="100"/>
 
 
     </Grid>

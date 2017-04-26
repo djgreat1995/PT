@@ -24,6 +24,7 @@ using Emgu.CV.CvEnum;
 using DirectShowLib;
 using System.IO;
 using Microsoft.Win32;
+using System.Threading;
 
 namespace SFR
 {
@@ -41,10 +42,19 @@ namespace SFR
         int contrastStore = 0;
         int sharpnessStore = 0;
         bool isCapture = false;
+        int ContTrain, NumLabels, t;
+        Image<Gray, byte> gray = null;
+        Capture grabber;
+        CascadeClassifier face;
+        Image<Gray, byte> result, TrainedFace = null;
+        List<Image<Gray, byte>> trainingImages = new List<Image<Gray, byte>>();
+        List<string> labels = new List<string>();
+        List<string> NamePersons = new List<string>();
 
         public MainWindow()
         {
             InitializeComponent();
+            face = new CascadeClassifier("haarcascade_frontalface_default.xml");
         }
 
         void timer_Tick(object sender, EventArgs e)
@@ -196,22 +206,31 @@ namespace SFR
 
         private void savePhoto_Click(object sender, RoutedEventArgs e)
         {
-            Stream stream;
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "Image files (*.png) |*.png";
-            sfd.FilterIndex = 2;
-            sfd.RestoreDirectory = true;
+            try
+           {
+                //Trained face counter
+                ContTrain = ContTrain + 1;
 
-            if (sfd.ShowDialog() == true)
-            {
-                if ((stream = sfd.OpenFile()) != null)
-                {
-                    var encoder = new PngBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create((BitmapSource)imageBox.Source));
-                    encoder.Save(stream);       
-                    stream.Close();
-                }
-            }
+            //Get a gray frame from capture device
+         
+            UMat grayFrame = new UMat();
+            var currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>();              
+            CvInvoke.CvtColor(currentFrame, grayFrame, ColorConversion.Bgr2Gray);
+            imageBox.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(grayFrame);
+
+
+                //Face Detector
+                System.Drawing.Rectangle[] facesDetected = face.DetectMultiScale(
+                grayFrame,
+                1.2,
+                10,
+                new System.Drawing.Size(20, 20));
+             
+
+
+        
+
         }
+
     }
 }
