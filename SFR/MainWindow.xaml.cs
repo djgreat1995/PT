@@ -225,12 +225,27 @@ namespace SFR
                 1.2,
                 10,
                 new System.Drawing.Size(20, 20));
-             
+
+                //Action for each element detected
+                foreach (System.Drawing.Rectangle f in facesDetected)
+                {
+                    TrainedFace = currentFrame.Copy(f).Convert<Gray, byte>();
+                    break;
+                }
+                imageBox.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(TrainedFace);
+                //resize face detected image for force to compare the same size with the 
+                //test image with cubic interpolation type method
+                TrainedFace = TrainedFace.Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
+
+                trainingImages.Add(TrainedFace);
+                labels.Add(nameTextBox.Text);
+
+                //Show face added in gray scale
+                // imageBox.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(TrainedFace);
 
 
-        
 
-        }
+            }
 
     }
 }
