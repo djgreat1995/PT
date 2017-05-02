@@ -51,6 +51,7 @@ namespace SFR
         List<string> labels = new List<string>();
         List<string> NamePersons = new List<string>();
 
+
         public MainWindow()
         {
             InitializeComponent();
@@ -256,7 +257,7 @@ namespace SFR
                     File.AppendAllText(startupPath + "/TrainedFaces/TrainedLabels.txt", labels.ToArray()[i - 1] + "%");
                 }
 
-                MessageBox.Show(nameTextBox.Text + "´s face detected and added :)", "Training OK", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(nameTextBox.Text + "´s face detected and added!", "Training OK", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception a)
             {
@@ -264,6 +265,33 @@ namespace SFR
                 MessageBox.Show("Enable the face detection first", "Training Fail", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
 
+        }
+        void FrameGrabber(object sender, EventArgs e)
+        {
+            NamePersons.Add("");
+            TrainedFace = TrainedFace.Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
+            UMat grayFrame = new UMat();
+            var currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>();
+            CvInvoke.CvtColor(currentFrame, grayFrame, ColorConversion.Bgr2Gray);
+
+            System.Drawing.Rectangle[] facesDetected = face.DetectMultiScale(
+                grayFrame,
+                1.2,
+                10,
+                new System.Drawing.Size(20, 20));
+
+            foreach (System.Drawing.Rectangle f in facesDetected)
+            {
+                t = t + 1;
+                result = currentFrame.Copy(f).Convert<Gray, byte>().Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
+                currentFrame.Draw(f, new Bgr(System.Drawing.Color.Red), 2);
+                if(trainingImages.ToArray().Length != 0)
+                {
+                    MCvTermCriteria termCrit = new MCvTermCriteria(ContTrain, 0.001);
+                    
+                    
+                }
+            }
         }
 
     }
