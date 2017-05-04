@@ -50,12 +50,35 @@ namespace SFR
         List<Image<Gray, byte>> trainingImages = new List<Image<Gray, byte>>();
         List<string> labels = new List<string>();
         List<string> NamePersons = new List<string>();
-
+        string link = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
         public MainWindow()
         {
             InitializeComponent();
             face = new CascadeClassifier("haarcascade_frontalface_default.xml");
+            try
+            {
+                //Load of previus trainned faces and labels for each image
+                string Labelsinfo = File.ReadAllText(link + "/TrainedLabels.txt");
+                string[] Labels = Labelsinfo.Split('%');
+                NumLabels = Convert.ToInt16(Labels[0]);
+                ContTrain = NumLabels;
+                string LoadFaces;
+
+                for (int tf = 1; tf < NumLabels + 1; tf++)
+                {
+                    LoadFaces = "face" + tf + ".bmp";
+                    trainingImages.Add(new Image<Gray, byte>(link + LoadFaces));
+                    labels.Add(Labels[tf]);
+                }
+
+            }
+            catch (Exception e)
+            {
+                //MessageBox.Show(e.ToString());
+                MessageBox.Show("Nothing in binary database, please add at least a face(Simply train the prototype with the Add Face Button).", "Triained faces load", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+
         }
 
         void timer_Tick(object sender, EventArgs e)
@@ -100,7 +123,7 @@ namespace SFR
                 MessageBox.Show(exception.Message);
             }
 
-            string link = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+           
             haarCascade = new CascadeClassifier(link + "/haarcascade_frontalface_default.xml"); //zestaw danych generowany z pliku
             timer = new DispatcherTimer();
             timer.Tick += new EventHandler(timer_Tick);
@@ -246,7 +269,6 @@ namespace SFR
 
                 string exePath = Environment.GetCommandLineArgs()[0];
                 string startupPath = System.IO.Path.GetDirectoryName(exePath);
-                MessageBox.Show(startupPath);
                 //Write the number of triained faces in a file text for further load
                 File.WriteAllText(startupPath + "/TrainedLabels.txt", trainingImages.ToArray().Length.ToString() + "%");
 
