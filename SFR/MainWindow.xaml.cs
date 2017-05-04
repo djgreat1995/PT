@@ -246,15 +246,15 @@ namespace SFR
 
                 string exePath = Environment.GetCommandLineArgs()[0];
                 string startupPath = System.IO.Path.GetDirectoryName(exePath);
-
+                MessageBox.Show(startupPath);
                 //Write the number of triained faces in a file text for further load
-                File.WriteAllText(startupPath + "/TrainedFaces/TrainedLabels.txt", trainingImages.ToArray().Length.ToString() + "%");
+                File.WriteAllText(startupPath + "/TrainedLabels.txt", trainingImages.ToArray().Length.ToString() + "%");
 
                 //Write the labels of triained faces in a file text for further load
                 for (int i = 1; i < trainingImages.ToArray().Length + 1; i++)
                 {
-                    trainingImages.ToArray()[i - 1].Save(startupPath + "/TrainedFaces/face" + i + ".bmp");
-                    File.AppendAllText(startupPath + "/TrainedFaces/TrainedLabels.txt", labels.ToArray()[i - 1] + "%");
+                    trainingImages.ToArray()[i - 1].Save(startupPath + "/face" + i + ".bmp");
+                    File.AppendAllText(startupPath + "/TrainedLabels.txt", labels.ToArray()[i - 1] + "%");
                 }
 
                 MessageBox.Show(nameTextBox.Text + "´s face detected and added!", "Training OK", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -288,8 +288,7 @@ namespace SFR
                 if(trainingImages.ToArray().Length != 0)
                 {
                     MCvTermCriteria termCrit = new MCvTermCriteria(ContTrain, 0.001);
-                    
-                    
+                        
                 }
             }
         }
