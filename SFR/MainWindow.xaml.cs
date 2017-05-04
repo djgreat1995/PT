@@ -59,7 +59,7 @@ namespace SFR
             try
             {
                 //Load of previus trainned faces and labels for each image
-                string Labelsinfo = File.ReadAllText(link + "/TrainedLabels.txt");
+                string Labelsinfo = File.ReadAllText(link + "/TrainedFaces/TrainedLabels.txt");
                 string[] Labels = Labelsinfo.Split('%');
                 NumLabels = Convert.ToInt16(Labels[0]);
                 ContTrain = NumLabels;
@@ -68,7 +68,7 @@ namespace SFR
                 for (int tf = 1; tf < NumLabels + 1; tf++)
                 {
                     LoadFaces = "face" + tf + ".bmp";
-                    trainingImages.Add(new Image<Gray, byte>(link + LoadFaces));
+                    trainingImages.Add(new Image<Gray, byte>(link + "/TrainedFaces/"+LoadFaces));
                     labels.Add(Labels[tf]);
                 }
 
@@ -76,7 +76,7 @@ namespace SFR
             catch (Exception e)
             {
                 //MessageBox.Show(e.ToString());
-                MessageBox.Show("Nothing in binary database, please add at least a face(Simply train the prototype with the Add Face Button).", "Triained faces load", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                MessageBox.Show("List of persons is empty. Now You can add new persons.", "Triained faces load", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
 
         }
@@ -270,13 +270,13 @@ namespace SFR
                 string exePath = Environment.GetCommandLineArgs()[0];
                 string startupPath = System.IO.Path.GetDirectoryName(exePath);
                 //Write the number of triained faces in a file text for further load
-                File.WriteAllText(startupPath + "/TrainedLabels.txt", trainingImages.ToArray().Length.ToString() + "%");
+                File.WriteAllText(startupPath + "/TrainedFaces/TrainedLabels.txt", trainingImages.ToArray().Length.ToString() + "%");
 
                 //Write the labels of triained faces in a file text for further load
                 for (int i = 1; i < trainingImages.ToArray().Length + 1; i++)
                 {
-                    trainingImages.ToArray()[i - 1].Save(startupPath + "/face" + i + ".bmp");
-                    File.AppendAllText(startupPath + "/TrainedLabels.txt", labels.ToArray()[i - 1] + "%");
+                    trainingImages.ToArray()[i - 1].Save(startupPath + "/TrainedFaces/face" + i + ".bmp");
+                    File.AppendAllText(startupPath + "/TrainedFaces/TrainedLabels.txt", labels.ToArray()[i - 1] + "%");
                 }
 
                 MessageBox.Show(nameTextBox.Text + "´s face detected and added!", "Training OK", MessageBoxButton.OK, MessageBoxImage.Information);
