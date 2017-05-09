@@ -25,6 +25,7 @@ using DirectShowLib;
 using System.IO;
 using Microsoft.Win32;
 using System.Threading;
+using Emgu.CV.Face;
 
 namespace SFR
 {
@@ -51,6 +52,11 @@ namespace SFR
         List<string> labels = new List<string>();
         List<string> NamePersons = new List<string>();
         string link = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+        public FaceRecognizer _faceRecognizer = new EigenFaceRecognizer(80, double.PositiveInfinity);
+        string _recognizerFilePath = "C:/PT/SFR/bin/x64/Debug/TrainedFaces/plik.yml";
+        Image<Gray, byte>[] faceImages = new Image<Gray, byte>[1];
+        int[] faceLabels = new int[1];
+
 
         public MainWindow()
         {
@@ -68,7 +74,7 @@ namespace SFR
                 for (int tf = 1; tf < NumLabels + 1; tf++)
                 {
                     LoadFaces = "face" + tf + ".bmp";
-                    trainingImages.Add(new Image<Gray, byte>(link + "/TrainedFaces/"+LoadFaces));
+                    trainingImages.Add(new Image<Gray, byte>(link + "/TrainedFaces/" + LoadFaces));
                     labels.Add(Labels[tf]);
                 }
 
@@ -76,7 +82,7 @@ namespace SFR
             catch (Exception e)
             {
                 //MessageBox.Show(e.ToString());
-                MessageBox.Show("List of persons is empty. Now You can add new persons.", "Triained faces load", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                MessageBox.Show("Exception " + e, "Triained faces load", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
 
         }
@@ -98,7 +104,7 @@ namespace SFR
                     var faces = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty); //aktualna detekcja twarzy
 
                     System.Drawing.Rectangle[] facesTab = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty); //tablica z wykrytymi twarzami
-                    
+
                     foreach (var face in faces)
                     {
                         currentFrame.Draw(face, new Bgr(System.Drawing.Color.DarkBlue), 3); //podswietlenie twarzy za pomocą box'a rysowanego dookoła niej
@@ -123,21 +129,25 @@ namespace SFR
                 MessageBox.Show(exception.Message);
             }
 
-           
+
             haarCascade = new CascadeClassifier(link + "/haarcascade_frontalface_default.xml"); //zestaw danych generowany z pliku
             timer = new DispatcherTimer();
             timer.Tick += new EventHandler(timer_Tick);
+            timer.Tick += new EventHandler(FrameGrabber);
             timer.Interval = new TimeSpan(0, 0, 0, 0, 1); //interwał 1 ms
             timer.Start();
             cameraInformation();
             capture.FlipHorizontal = !capture.FlipHorizontal; //obrot widoku kamery w poziomie
+
+
+
         }
 
         private void stopCaptureButton_Click(object sender, RoutedEventArgs e)
         {
             countFacesLabel.Content = "";
             richTextBox.Document.Blocks.Clear();
-            Reset_Cam_Settings_Click(null,null);
+            Reset_Cam_Settings_Click(null, null);
             timer.Stop();
             image.Source = null;
             capture.Dispose();
@@ -153,7 +163,7 @@ namespace SFR
             {
                 webCams[i] = new Video_Device(i, systemCameras[i].Name, systemCameras[i].ClassID); //fill web cam array
             }
-            richTextBox.AppendText("Camera name: "+webCams[cameraDevice].Device_Name +"\n\n");
+            richTextBox.AppendText("Camera name: " + webCams[cameraDevice].Device_Name + "\n\n");
         }
 
         private void cameraSettings()
@@ -191,14 +201,14 @@ namespace SFR
         }
 
         private void RetrieveCaptureInformation()
-        {           
-           
+        {
+
             brightnessSlider.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Brightness);  //Set the slider value
             brightnessLabel.Content = brightnessSlider.Value.ToString(); //set the slider text
-       
+
             contrastSlider.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Contrast);  //Set the slider value
             contrastLabel.Content = contrastSlider.Value.ToString(); //set the slider text
-      
+
             sharpnessSlider.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Sharpness);  //Set the slider value
             sharpnessLabel.Content = sharpnessSlider.Value.ToString(); //set the slider text
 
@@ -219,7 +229,7 @@ namespace SFR
         //Pobranie klatki
         private void takePhotoBtn_Click(object sender, RoutedEventArgs e)
         {
-            if(isCapture==true)
+            if (isCapture == true)
             {
                 using (var currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>())
                 {
@@ -231,16 +241,16 @@ namespace SFR
         private void savePhoto_Click(object sender, RoutedEventArgs e)
         {
             try
-           {
+            {
                 //Trained face counter
                 ContTrain = ContTrain + 1;
 
-            //Get a gray frame from capture device
-         
-            UMat grayFrame = new UMat();
-            var currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>();              
-            CvInvoke.CvtColor(currentFrame, grayFrame, ColorConversion.Bgr2Gray);
-            imageBox.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(grayFrame);
+                //Get a gray frame from capture device
+
+                UMat grayFrame = new UMat();
+                var currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>();
+                CvInvoke.CvtColor(currentFrame, grayFrame, ColorConversion.Bgr2Gray);
+                imageBox.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(grayFrame);
 
 
                 //Face Detector
@@ -279,6 +289,11 @@ namespace SFR
                     File.AppendAllText(startupPath + "/TrainedFaces/TrainedLabels.txt", labels.ToArray()[i - 1] + "%");
                 }
 
+                faceImages[0] = trainingImages[0];
+                faceLabels[0] = 0;
+                _faceRecognizer.Train(faceImages, faceLabels);
+                _faceRecognizer.Save(_recognizerFilePath);
+
                 MessageBox.Show(nameTextBox.Text + "´s face detected and added!", "Training OK", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception a)
@@ -288,32 +303,21 @@ namespace SFR
             }
 
         }
+
         void FrameGrabber(object sender, EventArgs e)
         {
-            NamePersons.Add("");
-            TrainedFace = TrainedFace.Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
-            UMat grayFrame = new UMat();
-            var currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>();
-            CvInvoke.CvtColor(currentFrame, grayFrame, ColorConversion.Bgr2Gray);
+            if (trainingImages.Count >0) {
+                Image<Gray, byte> userImage = new Image<Gray, byte>(link + "/TrainedFaces/face1.bmp");
 
-            System.Drawing.Rectangle[] facesDetected = face.DetectMultiScale(
-                grayFrame,
-                1.2,
-                10,
-                new System.Drawing.Size(20, 20));
+                _faceRecognizer.Load(_recognizerFilePath);
 
-            foreach (System.Drawing.Rectangle f in facesDetected)
-            {
-                t = t + 1;
-                result = currentFrame.Copy(f).Convert<Gray, byte>().Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
-                currentFrame.Draw(f, new Bgr(System.Drawing.Color.Red), 2);
-                if(trainingImages.ToArray().Length != 0)
-                {
-                    MCvTermCriteria termCrit = new MCvTermCriteria(ContTrain, 0.001);
-                        
-                }
+                var result = _faceRecognizer.Predict(userImage.Resize(100, 100, Inter.Cubic));
+                
             }
         }
+
+
+
 
     }
 }
