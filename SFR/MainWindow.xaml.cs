@@ -53,9 +53,10 @@ namespace SFR
         List<string> NamePersons = new List<string>();
         string link = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
         public FaceRecognizer _faceRecognizer = new EigenFaceRecognizer(80, double.PositiveInfinity);
-        string _recognizerFilePath = "C:/PT/SFR/bin/x64/Debug/TrainedFaces/plik.yml";
-        Image<Gray, byte>[] faceImages = new Image<Gray, byte>[1];
-        int[] faceLabels = new int[1];
+        string _recognizerFilePath = "B:/PT/SFR/bin/x64/Debug/TrainedFaces/plik.yml";
+        Image<Gray, byte>[] faceImages = new Image<Gray, byte>[3];
+        int[] faceLabels = new int[3];
+        Image<Bgr, Byte> currentFrame;
 
 
         public MainWindow()
@@ -139,7 +140,14 @@ namespace SFR
             cameraInformation();
             capture.FlipHorizontal = !capture.FlipHorizontal; //obrot widoku kamery w poziomie
 
+            for (int i = 0; i < NumLabels; i++)
+            {
+                faceImages[i] = trainingImages[i];
+                faceLabels[i] = Int32.Parse(labels[i]);
+            }
 
+            _faceRecognizer.Train(faceImages, faceLabels);
+            _faceRecognizer.Save(_recognizerFilePath);
 
         }
 
@@ -248,7 +256,7 @@ namespace SFR
                 //Get a gray frame from capture device
 
                 UMat grayFrame = new UMat();
-                var currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>();
+                currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>();
                 CvInvoke.CvtColor(currentFrame, grayFrame, ColorConversion.Bgr2Gray);
                 imageBox.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(grayFrame);
 
@@ -289,10 +297,7 @@ namespace SFR
                     File.AppendAllText(startupPath + "/TrainedFaces/TrainedLabels.txt", labels.ToArray()[i - 1] + "%");
                 }
 
-                faceImages[0] = trainingImages[0];
-                faceLabels[0] = 0;
-                _faceRecognizer.Train(faceImages, faceLabels);
-                _faceRecognizer.Save(_recognizerFilePath);
+                
 
                 MessageBox.Show(nameTextBox.Text + "´s face detected and added!", "Training OK", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -309,10 +314,14 @@ namespace SFR
             if (trainingImages.Count >0) {
                 Image<Gray, byte> userImage = new Image<Gray, byte>(link + "/TrainedFaces/face1.bmp");
 
+                
+
                 _faceRecognizer.Load(_recognizerFilePath);
 
                 var result = _faceRecognizer.Predict(userImage.Resize(100, 100, Inter.Cubic));
-                
+                faceLabel.Content = result.Label.ToString();
+
+
             }
         }
 
