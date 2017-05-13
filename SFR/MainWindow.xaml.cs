@@ -54,24 +54,29 @@ namespace SFR
         string link = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
         public FaceRecognizer _faceRecognizer = new EigenFaceRecognizer(80, double.PositiveInfinity);
         string _recognizerFilePath = "TrainedFaces/plik.yml";
-        Image<Gray, byte>[] faceImages = new Image<Gray, byte>[3];
-        int[] faceLabels = new int[3];
+        Image<Gray, byte>[] faceImages;
+        int [] faceLabels;
         Image<Bgr, Byte> currentFrame;
-
+        List<Person> people;
+        
 
         public MainWindow()
         {
             InitializeComponent();
+            people = new List<Person>();
             face = new CascadeClassifier("haarcascade_frontalface_default.xml");
             try
             {
+                  people = Person.personsFromJson(File.ReadAllText("TrainedFaces/people.txt"));
+
                 //Load of previus trainned faces and labels for each image
                 string Labelsinfo = File.ReadAllText(link + "/TrainedFaces/TrainedLabels.txt");
                 string[] Labels = Labelsinfo.Split('%');
                 NumLabels = Convert.ToInt16(Labels[0]);
                 ContTrain = NumLabels;
                 string LoadFaces;
-
+                faceImages = new Image<Gray, byte>[NumLabels];
+                faceLabels = new int[NumLabels];
                 for (int tf = 1; tf < NumLabels + 1; tf++)
                 {
                     LoadFaces = "face" + tf + ".bmp";
@@ -143,8 +148,9 @@ namespace SFR
             for (int i = 0; i < NumLabels; i++)
             {
                 faceImages[i] = trainingImages[i];
-                faceLabels[i] = Int32.Parse(labels[i]);
+                faceLabels[i] = Convert.ToInt32( labels[i]);
             }
+            // zrobić osobny plik z imionami bo tutaj sa tylko po intach czyli po kolenosci to zrobic 
             _faceRecognizer.Train(faceImages, faceLabels);
             _faceRecognizer.Save(_recognizerFilePath);
            
@@ -279,8 +285,22 @@ namespace SFR
                 TrainedFace = TrainedFace.Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
 
                 trainingImages.Add(TrainedFace);
-                labels.Add(nameTextBox.Text);
 
+                int _id = Person.findPersonID(people, nameTextBox.Text);
+                if (_id != -1)
+                {
+                    people.Add(new Person(nameTextBox.Text, _id));
+                    labels.Add(_id.ToString());
+                }
+                else
+                {
+                    
+                    int __id = Person.setID(people); 
+                    people.Add(new Person(nameTextBox.Text, __id));
+                    labels.Add(__id.ToString());
+                }
+
+                File.WriteAllText("TrainedFaces/people.txt", Person.personsToJson(people));
                 //Show face added in gray scale
                 // imageBox.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(TrainedFace);
 
@@ -310,24 +330,22 @@ namespace SFR
 
         void FrameGrabber(object sender, EventArgs e)
         {
-            _faceRecognizer.Load(_recognizerFilePath);
+           // _faceRecognizer.Load(_recognizerFilePath);
 
                 if(actualFace()!=null)
                 {
                     var result = _faceRecognizer.Predict(actualFace());
-                    faceLabel.Content = result.Label.ToString();
+                    faceLabel.Content = Person.findNameByID(people, result.Label);   
+                // faceLabel.Content = result.Label.ToString();
                 }
                 else
-                    faceLabel.Content = "";
-                
-
-            
+                    faceLabel.Content = ""; 
         }
 
 
         private Image<Gray, byte> actualFace()
         {
-            ContTrain = ContTrain + 1;
+           // ContTrain = ContTrain + 1;
 
             UMat grayFrame = new UMat();
             currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>();
