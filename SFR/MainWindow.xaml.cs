@@ -53,7 +53,7 @@ namespace SFR
         List<string> NamePersons = new List<string>();
         string link = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
         public FaceRecognizer _faceRecognizer = new EigenFaceRecognizer(80, double.PositiveInfinity);
-        string _recognizerFilePath = "B:/PT/SFR/bin/x64/Debug/TrainedFaces/plik.yml";
+        string _recognizerFilePath = "TrainedFaces/plik.yml";
         Image<Gray, byte>[] faceImages = new Image<Gray, byte>[3];
         int[] faceLabels = new int[3];
         Image<Bgr, Byte> currentFrame;
@@ -145,10 +145,9 @@ namespace SFR
                 faceImages[i] = trainingImages[i];
                 faceLabels[i] = Int32.Parse(labels[i]);
             }
-
             _faceRecognizer.Train(faceImages, faceLabels);
             _faceRecognizer.Save(_recognizerFilePath);
-
+           
         }
 
         private void stopCaptureButton_Click(object sender, RoutedEventArgs e)
@@ -311,21 +310,49 @@ namespace SFR
 
         void FrameGrabber(object sender, EventArgs e)
         {
-            if (trainingImages.Count >0) {
-                Image<Gray, byte> userImage = new Image<Gray, byte>(link + "/TrainedFaces/face1.bmp");
+            _faceRecognizer.Load(_recognizerFilePath);
 
+                if(actualFace()!=null)
+                {
+                    var result = _faceRecognizer.Predict(actualFace());
+                    faceLabel.Content = result.Label.ToString();
+                }
+                else
+                    faceLabel.Content = "";
                 
 
-                _faceRecognizer.Load(_recognizerFilePath);
-
-                var result = _faceRecognizer.Predict(userImage.Resize(100, 100, Inter.Cubic));
-                faceLabel.Content = result.Label.ToString();
-
-
-            }
+            
         }
 
 
+        private Image<Gray, byte> actualFace()
+        {
+            ContTrain = ContTrain + 1;
+
+            UMat grayFrame = new UMat();
+            currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>();
+            CvInvoke.CvtColor(currentFrame, grayFrame, ColorConversion.Bgr2Gray);
+  
+
+            //Face Detector
+            System.Drawing.Rectangle[] facesDetected = face.DetectMultiScale(
+            grayFrame,
+            1.2,
+            10,
+            new System.Drawing.Size(20, 20));
+            
+            //Action for each element detected
+            foreach (System.Drawing.Rectangle f in facesDetected)
+            {
+                TrainedFace = currentFrame.Copy(f).Convert<Gray, byte>();
+                break;
+            }
+       
+            if (TrainedFace != null)
+                return TrainedFace.Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
+            else
+                return null;
+        }
 
 
     }
