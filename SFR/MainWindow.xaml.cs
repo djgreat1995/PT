@@ -67,7 +67,7 @@ namespace SFR
             face = new CascadeClassifier("haarcascade_frontalface_default.xml");
             try
             {
-                  people = Person.personsFromJson(File.ReadAllText("TrainedFaces/people.txt"));
+                people = Person.personsFromJson(File.ReadAllText("TrainedFaces/people.txt"));
 
                 //Load of previus trainned faces and labels for each image
                 string Labelsinfo = File.ReadAllText(link + "/TrainedFaces/TrainedLabels.txt");
@@ -135,25 +135,23 @@ namespace SFR
                 MessageBox.Show(exception.Message);
             }
 
-
             haarCascade = new CascadeClassifier(link + "/haarcascade_frontalface_default.xml"); //zestaw danych generowany z pliku
             timer = new DispatcherTimer();
             timer.Tick += new EventHandler(timer_Tick);
             timer.Tick += new EventHandler(FrameGrabber);
+            
             timer.Interval = new TimeSpan(0, 0, 0, 0, 1); //interwał 1 ms
             timer.Start();
             cameraInformation();
             capture.FlipHorizontal = !capture.FlipHorizontal; //obrot widoku kamery w poziomie
-
             for (int i = 0; i < NumLabels; i++)
             {
                 faceImages[i] = trainingImages[i];
-                faceLabels[i] = Convert.ToInt32( labels[i]);
+                faceLabels[i] = Convert.ToInt32(labels[i]);
             }
-            // zrobić osobny plik z imionami bo tutaj sa tylko po intach czyli po kolenosci to zrobic 
             _faceRecognizer.Train(faceImages, faceLabels);
             _faceRecognizer.Save(_recognizerFilePath);
-           
+
         }
 
         private void stopCaptureButton_Click(object sender, RoutedEventArgs e)
@@ -332,18 +330,31 @@ namespace SFR
         {
            // _faceRecognizer.Load(_recognizerFilePath);
 
-                if( actualFace() != null )
+            if( actualFace() != null )
+            {
+                var result = _faceRecognizer.Predict(actualFace());
+                if (result.Distance<3000)
                 {
                     faceLabel.Foreground = new SolidColorBrush(Colors.Green);
-                    var result = _faceRecognizer.Predict(actualFace());
-                    faceLabel.Content = Person.findNameByID(people, result.Label);   
-                    // faceLabel.Content = result.Label.ToString();
+                    faceLabel.Content = Person.findNameByID(people, result.Label);
+                    labelDistance.Foreground = new SolidColorBrush(Colors.Green);
+                    labelDistance.Content = "Distance: " + result.Distance;
                 }
                 else
                 {
+                
                     faceLabel.Foreground = new SolidColorBrush(Colors.Red);
                     faceLabel.Content = "Student unidentified";
-                }        
+                    labelDistance.Foreground = new SolidColorBrush(Colors.Red);
+                    labelDistance.Content = "Distance: " + result.Distance;
+                }
+            }
+            else
+            {
+                faceLabel.Foreground = new SolidColorBrush(Colors.Red);
+                faceLabel.Content = "Student unidentified";
+           
+            }        
         }
 
 
