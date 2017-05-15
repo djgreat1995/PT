@@ -332,14 +332,18 @@ namespace SFR
         {
            // _faceRecognizer.Load(_recognizerFilePath);
 
-                if(actualFace()!=null)
+                if( actualFace() != null )
                 {
+                    faceLabel.Foreground = new SolidColorBrush(Colors.Green);
                     var result = _faceRecognizer.Predict(actualFace());
                     faceLabel.Content = Person.findNameByID(people, result.Label);   
-                // faceLabel.Content = result.Label.ToString();
+                    // faceLabel.Content = result.Label.ToString();
                 }
                 else
-                    faceLabel.Content = ""; 
+                {
+                    faceLabel.Foreground = new SolidColorBrush(Colors.Red);
+                    faceLabel.Content = "Student unidentified";
+                }        
         }
 
 
@@ -350,7 +354,6 @@ namespace SFR
             UMat grayFrame = new UMat();
             currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>();
             CvInvoke.CvtColor(currentFrame, grayFrame, ColorConversion.Bgr2Gray);
-  
 
             //Face Detector
             System.Drawing.Rectangle[] facesDetected = face.DetectMultiScale(
