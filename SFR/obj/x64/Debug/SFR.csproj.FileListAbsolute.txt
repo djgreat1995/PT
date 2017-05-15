@@ -164,3 +164,6 @@ C:\Users\mikol\Desktop\SEMESTR VI\PT\Repozytorium\PT\SFR\bin\x64\Debug\Newtonsof
 C:\Users\mikol\Desktop\SEMESTR VI\PT\Repozytorium\PT\SFR\bin\x64\Debug\Newtonsoft.Json.xml
 B:\PT\SFR\bin\x64\Debug\Newtonsoft.Json.dll
 B:\PT\SFR\bin\x64\Debug\Newtonsoft.Json.xml
+C:\PT\SFR\bin\x64\Debug\Newtonsoft.Json.dll
+C:\PT\SFR\bin\x64\Debug\Newtonsoft.Json.xml
+C:\PT\SFR\obj\x64\Debug\SFR.csprojResolveAssemblyReference.cache

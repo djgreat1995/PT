@@ -55,10 +55,10 @@ namespace SFR
         public FaceRecognizer _faceRecognizer = new EigenFaceRecognizer(80, double.PositiveInfinity);
         string _recognizerFilePath = "TrainedFaces/plik.yml";
         Image<Gray, byte>[] faceImages;
-        int [] faceLabels;
+        int[] faceLabels;
         Image<Bgr, Byte> currentFrame;
         List<Person> people;
-        
+        int iterator;
 
         public MainWindow()
         {
@@ -110,12 +110,25 @@ namespace SFR
                     var faces = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty); //aktualna detekcja twarzy
 
                     System.Drawing.Rectangle[] facesTab = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty); //tablica z wykrytymi twarzami
-
+                    iterator = 0;
                     foreach (var face in faces)
                     {
-                        currentFrame.Draw(face, new Bgr(System.Drawing.Color.DarkBlue), 3); //podswietlenie twarzy za pomocą box'a rysowanego dookoła niej
+
+                        iterator++;
+                        if (iterator <= 1)
+                        {
+                            currentFrame.Draw(face, new Bgr(System.Drawing.Color.DarkBlue), 3); //podswietlenie twarzy za pomocą box'a rysowanego dookoła niej
+                        }
                     }
-                    countFacesLabel.Content = facesTab.Length.ToString(); //zliczanie twarzy
+                    if (facesTab.Length > 0)
+                    {
+
+                        countFacesLabel.Content = true.ToString(); //zliczanie twarzy
+                    }
+                    else
+                    {
+                        countFacesLabel.Content = false.ToString(); //zliczanie twarzy
+                    }
                 }
                 image.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(currentFrame); //przekazanie obrazu na komponent Image
             }
@@ -139,7 +152,7 @@ namespace SFR
             timer = new DispatcherTimer();
             timer.Tick += new EventHandler(timer_Tick);
             timer.Tick += new EventHandler(FrameGrabber);
-            
+
             timer.Interval = new TimeSpan(0, 0, 0, 0, 1); //interwał 1 ms
             timer.Start();
             cameraInformation();
@@ -163,6 +176,7 @@ namespace SFR
             image.Source = null;
             capture.Dispose();
             isCapture = false;
+            iterator = 0;
         }
 
         //Get camera information
@@ -292,8 +306,8 @@ namespace SFR
                 }
                 else
                 {
-                    
-                    int __id = Person.setID(people); 
+
+                    int __id = Person.setID(people);
                     people.Add(new Person(nameTextBox.Text, __id));
                     labels.Add(__id.ToString());
                 }
@@ -314,7 +328,7 @@ namespace SFR
                     File.AppendAllText(startupPath + "/TrainedFaces/TrainedLabels.txt", labels.ToArray()[i - 1] + "%");
                 }
 
-                
+
 
                 MessageBox.Show(nameTextBox.Text + "´s face detected and added!", "Training OK", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -328,12 +342,12 @@ namespace SFR
 
         void FrameGrabber(object sender, EventArgs e)
         {
-           // _faceRecognizer.Load(_recognizerFilePath);
+            // _faceRecognizer.Load(_recognizerFilePath);
 
-            if( actualFace() != null )
+            if (actualFace() != null)
             {
                 var result = _faceRecognizer.Predict(actualFace());
-                if (result.Distance<3000)
+                if (result.Distance < 3000)
                 {
                     faceLabel.Foreground = new SolidColorBrush(Colors.Green);
                     faceLabel.Content = Person.findNameByID(people, result.Label);
@@ -342,7 +356,7 @@ namespace SFR
                 }
                 else
                 {
-                
+
                     faceLabel.Foreground = new SolidColorBrush(Colors.Red);
                     faceLabel.Content = "Student unidentified";
                     labelDistance.Foreground = new SolidColorBrush(Colors.Red);
@@ -353,14 +367,14 @@ namespace SFR
             {
                 faceLabel.Foreground = new SolidColorBrush(Colors.Red);
                 faceLabel.Content = "Student unidentified";
-           
-            }        
+
+            }
         }
 
 
         private Image<Gray, byte> actualFace()
         {
-           // ContTrain = ContTrain + 1;
+            // ContTrain = ContTrain + 1;
 
             UMat grayFrame = new UMat();
             currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>();
@@ -372,14 +386,14 @@ namespace SFR
             1.2,
             10,
             new System.Drawing.Size(20, 20));
-            
+
             //Action for each element detected
             foreach (System.Drawing.Rectangle f in facesDetected)
             {
                 TrainedFace = currentFrame.Copy(f).Convert<Gray, byte>();
                 break;
             }
-       
+
             if (TrainedFace != null)
                 return TrainedFace.Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
             else

@@ -11,9 +11,8 @@
         <Image x:Name="image" HorizontalAlignment="Left" Height="261" Margin="31,32,0,0" VerticalAlignment="Top" Width="377" Stretch="Fill"/>
         <Button x:Name="startCaptureButton" Content="Start capturing" HorizontalAlignment="Left" Margin="31,332,0,0" VerticalAlignment="Top" Width="377" Height="35" Click="captureButton_Click"/>
         <Button x:Name="stopCaptureButton" Content="Stop capturing" HorizontalAlignment="Left" Margin="31,380,0,0" VerticalAlignment="Top" Width="377" Height="36" Click="stopCaptureButton_Click"/>
-        <Label x:Name="numberOfFacesLabel" Content="Number of faces:
-               " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="31,296,0,0" Width="146" FontSize="16"/>
-        <Label x:Name="countFacesLabel" Content="" HorizontalAlignment="Left" Margin="169,296,0,0" VerticalAlignment="Top" Width="28" FontSize="16"/>
+        <Label x:Name="numberOfFacesLabel" Content="Face detect ?           " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="31,296,0,0" Width="105" FontSize="16"/>
+        <Label x:Name="countFacesLabel" Content="" HorizontalAlignment="Left" Margin="141,296,0,0" VerticalAlignment="Top" Width="111" FontSize="16"/>
         <RichTextBox x:Name="richTextBox" Height="84" VerticalAlignment="Top" Margin="492,332,10,0">
             <FlowDocument>
                 <Paragraph>
@@ -37,7 +36,7 @@
         <Label x:Name="capturedPhoto" Content="Captured Photo:" HorizontalAlignment="Left" Margin="756,114,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="nameTextBox" HorizontalAlignment="Left" Height="23" Margin="498,83,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" RenderTransformOrigin="0.133,0.565"/>
         <Label x:Name="nameLabel" Content="Student's name:" HorizontalAlignment="Left" Margin="492,52,0,0" VerticalAlignment="Top" Width="100"/>
-        <Label x:Name="faceLabel" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="279,298,0,0"/>
+        <Label x:Name="faceLabel" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="262,298,0,0" Width="146"/>
         <Label x:Name="labelDistance"  HorizontalAlignment="Left" Margin="31,0,0,0" VerticalAlignment="Top" Width="207" Height="27"/>
 
 
