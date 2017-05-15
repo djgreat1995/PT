@@ -58,7 +58,7 @@ namespace SFR
         int[] faceLabels;
         Image<Bgr, Byte> currentFrame;
         List<Person> people;
-        int iterator;
+        Font font;
 
         public MainWindow()
         {
@@ -110,25 +110,14 @@ namespace SFR
                     var faces = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty); //aktualna detekcja twarzy
 
                     System.Drawing.Rectangle[] facesTab = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty); //tablica z wykrytymi twarzami
-                    iterator = 0;
+
                     foreach (var face in faces)
                     {
+                        currentFrame.Draw(face, new Bgr(System.Drawing.Color.DarkBlue), 3); //podswietlenie twarzy za pomocą box'a rysowanego dookoła niej
+                        CvInvoke.PutText(currentFrame, faceLabel.Content.ToString(), new System.Drawing.Point(face.Location.X + 10, face.Location.Y - 10), Emgu.CV.CvEnum.FontFace.HersheyComplex, 1.0, new Bgr(0, 255, 0).MCvScalar);
+                    }
 
-                        iterator++;
-                        if (iterator <= 1)
-                        {
-                            currentFrame.Draw(face, new Bgr(System.Drawing.Color.DarkBlue), 3); //podswietlenie twarzy za pomocą box'a rysowanego dookoła niej
-                        }
-                    }
-                    if (facesTab.Length > 0)
-                    {
-
-                        countFacesLabel.Content = true.ToString(); //zliczanie twarzy
-                    }
-                    else
-                    {
-                        countFacesLabel.Content = false.ToString(); //zliczanie twarzy
-                    }
+                    countFacesLabel.Content = facesTab.Length.ToString(); //zliczanie twarzy
                 }
                 image.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(currentFrame); //przekazanie obrazu na komponent Image
             }
@@ -176,7 +165,6 @@ namespace SFR
             image.Source = null;
             capture.Dispose();
             isCapture = false;
-            iterator = 0;
         }
 
         //Get camera information
@@ -347,10 +335,12 @@ namespace SFR
             if (actualFace() != null)
             {
                 var result = _faceRecognizer.Predict(actualFace());
+         
                 if (result.Distance < 3000)
                 {
                     faceLabel.Foreground = new SolidColorBrush(Colors.Green);
                     faceLabel.Content = Person.findNameByID(people, result.Label);
+                  
                     labelDistance.Foreground = new SolidColorBrush(Colors.Green);
                     labelDistance.Content = "Distance: " + result.Distance;
                 }
@@ -386,6 +376,7 @@ namespace SFR
             1.2,
             10,
             new System.Drawing.Size(20, 20));
+          
 
             //Action for each element detected
             foreach (System.Drawing.Rectangle f in facesDetected)
@@ -393,6 +384,7 @@ namespace SFR
                 TrainedFace = currentFrame.Copy(f).Convert<Gray, byte>();
                 break;
             }
+            
 
             if (TrainedFace != null)
                 return TrainedFace.Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
