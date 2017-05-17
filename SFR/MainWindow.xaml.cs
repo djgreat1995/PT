@@ -46,25 +46,27 @@ namespace SFR
         bool isCapture = false;
         int ContTrain, NumLabels;
         CascadeClassifier face;
-        Image<Gray, byte>  TrainedFace = null;
+        Image<Gray, byte> TrainedFace = null;
         List<Image<Gray, byte>> trainingImages = new List<Image<Gray, byte>>();
         List<string> labels = new List<string>();
         List<string> NamePersons = new List<string>();
         string link = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-        public FaceRecognizer _faceRecognizer = new EigenFaceRecognizer(80, double.PositiveInfinity);
+        //FaceRecognizer _faceRecognizer = new EigenFaceRecognizer(80, double.PositiveInfinity);
+        FaceRecognizer _faceRecognizer = new LBPHFaceRecognizer(1, 8, 8, 8, 100);
         string _recognizerFilePath = "TrainedFaces/plik.yml";
         Image<Gray, byte>[] faceImages;
         int[] faceLabels;
         Image<Bgr, Byte> currentFrame;
         List<Person> people;
-        Font font;
         int FPS = 1000;
+        public string face_label ="";
+
 
         public MainWindow()
         {
             InitializeComponent();
             timer = new DispatcherTimer();
-            
+
 
             timer.Interval = TimeSpan.FromMilliseconds(1000 / FPS); //interwał 1 ms
             timer.Start();
@@ -98,72 +100,15 @@ namespace SFR
 
         }
 
-        void ComponentDispatcher_ThreadIdle(object sender, EventArgs e)
-        {
-            using (var currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>())
-            {
-                if (currentFrame != null)
-                {
-                    Image<Gray, Byte> grayFrame = currentFrame.Convert<Gray, byte>(); //konwertowanie do klatki w odcieniach szarości
-                    //Parametry metody DetectMultiScale: 
-                    //- grayscale image (grayFrame) - aktualny obrazek, z ktorego chcemy wykryc twarz.  
-                    //- scale factor (współczynnik skali) - musi być większy niż 1.0. Im bliżej do 1.0, tym więcej czasu
-                    //  zajmuje wykrycie twarzy, ale istnieje większa szansa, że znajdziemy twarz
-                    //- minimum number of nearest neighbors - im większa liczba, tym mniej otrzymamy fałszywych pozytywów
-                    //- max size (px) - pozostawic pusty 
-
-                    var faces = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty); //aktualna detekcja twarzy
-
-                    System.Drawing.Rectangle[] facesTab = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty); //tablica z wykrytymi twarzami
-
-                    foreach (var face in faces)
-                    {
-                        currentFrame.Draw(face, new Bgr(System.Drawing.Color.DarkBlue), 3); //podswietlenie twarzy za pomocą box'a rysowanego dookoła niej
-                        CvInvoke.PutText(currentFrame, faceLabel.Content.ToString(), new System.Drawing.Point(face.Location.X + 10, face.Location.Y - 10), Emgu.CV.CvEnum.FontFace.HersheyComplex, 1.0, new Bgr(0, 255, 0).MCvScalar);
-                    }
-
-                    countFacesLabel.Content = facesTab.Length.ToString(); //zliczanie twarzy
-                }
-                image.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(currentFrame); //przekazanie obrazu na komponent Image
-            }
-            cameraSettings();
-        }
-
         void timer_Tick(object sender, EventArgs e)
         {
-            using (var currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>())
-            {
-                if (currentFrame != null)
-                {
-                    Image<Gray, Byte> grayFrame = currentFrame.Convert<Gray, byte>(); //konwertowanie do klatki w odcieniach szarości
-                    //Parametry metody DetectMultiScale: 
-                    //- grayscale image (grayFrame) - aktualny obrazek, z ktorego chcemy wykryc twarz.  
-                    //- scale factor (współczynnik skali) - musi być większy niż 1.0. Im bliżej do 1.0, tym więcej czasu
-                    //  zajmuje wykrycie twarzy, ale istnieje większa szansa, że znajdziemy twarz
-                    //- minimum number of nearest neighbors - im większa liczba, tym mniej otrzymamy fałszywych pozytywów
-                    //- max size (px) - pozostawic pusty 
 
-                    var faces = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty); //aktualna detekcja twarzy
-
-                    System.Drawing.Rectangle[] facesTab = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty); //tablica z wykrytymi twarzami
-
-                    foreach (var face in faces)
-                    {
-                        currentFrame.Draw(face, new Bgr(System.Drawing.Color.DarkBlue), 3); //podswietlenie twarzy za pomocą box'a rysowanego dookoła niej
-                        CvInvoke.PutText(currentFrame, faceLabel.Content.ToString(), new System.Drawing.Point(face.Location.X + 10, face.Location.Y - 10), Emgu.CV.CvEnum.FontFace.HersheyComplex, 1.0, new Bgr(0, 255, 0).MCvScalar);
-                    }
-
-                    countFacesLabel.Content = facesTab.Length.ToString(); //zliczanie twarzy
-                }
-                image.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(currentFrame); //przekazanie obrazu na komponent Image
-            }
             cameraSettings();
         }
 
         private void captureButton_Click(object sender, RoutedEventArgs e)
         {
             isCapture = true;
-
             try
             {
                 capture = new Capture();
@@ -175,10 +120,7 @@ namespace SFR
             timer.Tick += new EventHandler(timer_Tick);
             timer.Tick += new EventHandler(FrameGrabber);
             haarCascade = new CascadeClassifier(link + "/haarcascade_frontalface_default.xml"); //zestaw danych generowany z pliku
-            
-            //Application.Idle += new EventHandler(FrameGrabber);
-            //ComponentDispatcher.ThreadIdle += new System.EventHandler(ComponentDispatcher_ThreadIdle);
-            //ComponentDispatcher.ThreadIdle += new System.EventHandler(FrameGrabber);
+
             cameraInformation();
             capture.FlipHorizontal = !capture.FlipHorizontal; //obrot widoku kamery w poziomie
             for (int i = 0; i < NumLabels; i++)
@@ -300,7 +242,6 @@ namespace SFR
                 CvInvoke.CvtColor(currentFrame, grayFrame, ColorConversion.Bgr2Gray);
                 imageBox.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(grayFrame);
 
-
                 //Face Detector
                 System.Drawing.Rectangle[] facesDetected = face.DetectMultiScale(
                 grayFrame,
@@ -329,7 +270,6 @@ namespace SFR
                 }
                 else
                 {
-
                     int __id = Person.setID(people);
                     people.Add(new Person(nameTextBox.Text, __id));
                     labels.Add(__id.ToString());
@@ -337,8 +277,6 @@ namespace SFR
 
                 File.WriteAllText("TrainedFaces/people.txt", Person.personsToJson(people));
                 //Show face added in gray scale
-                // imageBox.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(TrainedFace);
-
                 string exePath = Environment.GetCommandLineArgs()[0];
                 string startupPath = System.IO.Path.GetDirectoryName(exePath);
                 //Write the number of triained faces in a file text for further load
@@ -350,9 +288,6 @@ namespace SFR
                     trainingImages.ToArray()[i - 1].Save(startupPath + "/TrainedFaces/face" + i + ".bmp");
                     File.AppendAllText(startupPath + "/TrainedFaces/TrainedLabels.txt", labels.ToArray()[i - 1] + "%");
                 }
-
-
-
                 MessageBox.Show(nameTextBox.Text + "´s face detected and added!", "Training OK", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception a)
@@ -360,39 +295,30 @@ namespace SFR
                 MessageBox.Show(a.ToString());
                 MessageBox.Show("Enable the face detection first", "Training Fail", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
-
         }
 
         void FrameGrabber(object sender, EventArgs e)
         {
-            // _faceRecognizer.Load(_recognizerFilePath);
-
             if (actualFace() != null)
             {
                 var result = _faceRecognizer.Predict(actualFace());
-
-                faceLabel.Foreground = new SolidColorBrush(Colors.Green);
-                faceLabel.Content = Person.findNameByID(people, result.Label);
-                  
+                face_label = Person.findNameByID(people, result.Label);
                 labelDistance.Foreground = new SolidColorBrush(Colors.Green);
                 labelDistance.Content = "Distance: " + result.Distance;
             }
             else
             {
-                faceLabel.Foreground = new SolidColorBrush(Colors.Red);
-                faceLabel.Content = "Student unidentified";
-
+                face_label = "Student unidentified";
             }
         }
 
 
         private Image<Gray, byte> actualFace()
         {
-            // ContTrain = ContTrain + 1;
 
-            UMat grayFrame = new UMat();
             currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>();
-            CvInvoke.CvtColor(currentFrame, grayFrame, ColorConversion.Bgr2Gray);
+            Image<Gray, Byte> grayFrame = currentFrame.Convert<Gray, byte>(); //konwertowanie do klatki w odcieniach szarości
+            var faces = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty); //aktualna detekcja twarzy
 
             //Face Detector
             System.Drawing.Rectangle[] facesDetected = face.DetectMultiScale(
@@ -400,22 +326,35 @@ namespace SFR
             1.2,
             10,
             new System.Drawing.Size(20, 20));
-          
+
 
             //Action for each element detected
             foreach (System.Drawing.Rectangle f in facesDetected)
             {
                 TrainedFace = currentFrame.Copy(f).Convert<Gray, byte>();
+                currentFrame.Draw(f, new Bgr(System.Drawing.Color.DarkBlue), 3); //podswietlenie twarzy za pomocą box'a rysowanego dookoła niej
+                CvInvoke.PutText(currentFrame, face_label, new System.Drawing.Point(f.Location.X + 10, f.Location.Y - 10), Emgu.CV.CvEnum.FontFace.HersheyComplex, 1.0, new Bgr(0, 255, 0).MCvScalar);
                 break;
             }
-            
+
+            image.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(currentFrame); //przekazanie obrazu na komponent Image
+            System.Drawing.Rectangle[] facesTab = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty); //tablica z wykrytymi twarzami
+            countFacesLabel.Content = facesTab.Length.ToString(); //zliczanie twarzy
+
+            if (facesTab.Length < 1)
+            {
+                countFacesLabel.Content = false.ToString();
+            }
+            else
+            {
+                countFacesLabel.Content = true.ToString();
+            }
 
             if (TrainedFace != null)
                 return TrainedFace.Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
             else
                 return null;
         }
-
 
     }
 }
