@@ -44,11 +44,9 @@ namespace SFR
         int contrastStore = 0;
         int sharpnessStore = 0;
         bool isCapture = false;
-        int ContTrain, NumLabels, t;
-        Image<Gray, byte> gray = null;
-        Capture grabber;
+        int ContTrain, NumLabels;
         CascadeClassifier face;
-        Image<Gray, byte> result, TrainedFace = null;
+        Image<Gray, byte>  TrainedFace = null;
         List<Image<Gray, byte>> trainingImages = new List<Image<Gray, byte>>();
         List<string> labels = new List<string>();
         List<string> NamePersons = new List<string>();
@@ -372,23 +370,12 @@ namespace SFR
             if (actualFace() != null)
             {
                 var result = _faceRecognizer.Predict(actualFace());
-                    
-                if (result.Distance < 3000)
-                {
-                    faceLabel.Foreground = new SolidColorBrush(Colors.Green);
-                    faceLabel.Content = Person.findNameByID(people, result.Label);
-                  
-                    labelDistance.Foreground = new SolidColorBrush(Colors.Green);
-                    labelDistance.Content = "Distance: " + result.Distance;
-                }
-                else
-                {
 
-                    faceLabel.Foreground = new SolidColorBrush(Colors.Red);
-                    faceLabel.Content = "Student unidentified";
-                    labelDistance.Foreground = new SolidColorBrush(Colors.Red);
-                    labelDistance.Content = "Distance: " + result.Distance;
-                }
+                faceLabel.Foreground = new SolidColorBrush(Colors.Green);
+                faceLabel.Content = Person.findNameByID(people, result.Label);
+                  
+                labelDistance.Foreground = new SolidColorBrush(Colors.Green);
+                labelDistance.Content = "Distance: " + result.Distance;
             }
             else
             {
