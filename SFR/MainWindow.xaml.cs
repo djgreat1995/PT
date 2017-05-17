@@ -135,7 +135,6 @@ namespace SFR
 
         private void stopCaptureButton_Click(object sender, RoutedEventArgs e)
         {
-            countFacesLabel.Content = "";
             richTextBox.Document.Blocks.Clear();
             Reset_Cam_Settings_Click(null, null);
             timer.Stop();
@@ -299,17 +298,23 @@ namespace SFR
 
         void FrameGrabber(object sender, EventArgs e)
         {
+            string name;
             if (actualFace() != null)
             {
                 var result = _faceRecognizer.Predict(actualFace());
-                face_label = Person.findNameByID(people, result.Label);
+                name = Person.findNameByID(people, result.Label);
+                face_label = name;
+                LabelName.Content = "PERSON: "+name;
                 labelDistance.Foreground = new SolidColorBrush(Colors.Green);
                 labelDistance.Content = "Distance: " + result.Distance;
             }
             else
             {
-                face_label = "Student unidentified";
+                face_label = "Person undetected";
+                LabelName.Content = "Person undetected";
             }
+           
+             
         }
 
 
@@ -327,7 +332,7 @@ namespace SFR
             10,
             new System.Drawing.Size(20, 20));
 
-
+            TrainedFace = null;
             //Action for each element detected
             foreach (System.Drawing.Rectangle f in facesDetected)
             {
@@ -339,16 +344,7 @@ namespace SFR
 
             image.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(currentFrame); //przekazanie obrazu na komponent Image
             System.Drawing.Rectangle[] facesTab = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty); //tablica z wykrytymi twarzami
-            countFacesLabel.Content = facesTab.Length.ToString(); //zliczanie twarzy
 
-            if (facesTab.Length < 1)
-            {
-                countFacesLabel.Content = false.ToString();
-            }
-            else
-            {
-                countFacesLabel.Content = true.ToString();
-            }
 
             if (TrainedFace != null)
                 return TrainedFace.Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
