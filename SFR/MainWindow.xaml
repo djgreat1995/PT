@@ -36,7 +36,7 @@
         <Label x:Name="capturedPhoto" Content="Captured Photo:" HorizontalAlignment="Left" Margin="756,114,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="nameTextBox" HorizontalAlignment="Left" Height="23" Margin="498,83,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" RenderTransformOrigin="0.133,0.565"/>
         <Label x:Name="nameLabel" Content="Student's name:" HorizontalAlignment="Left" Margin="492,52,0,0" VerticalAlignment="Top" Width="100"/>
-        <Label x:Name="faceLabel" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="262,298,0,0" Width="146"/>
+        <Label x:Name="faceLabel" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="235,298,0,0" Width="173"/>
         <Label x:Name="labelDistance"  HorizontalAlignment="Left" Margin="31,0,0,0" VerticalAlignment="Top" Width="207" Height="27"/>
 
 
