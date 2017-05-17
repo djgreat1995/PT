@@ -69,7 +69,7 @@ namespace SFR
 
 
             timer.Interval = TimeSpan.FromMilliseconds(1000 / FPS); //interwał 1 ms
-            timer.Start();
+        
             people = new List<Person>();
             face = new CascadeClassifier("haarcascade_frontalface_default.xml");
             try
@@ -108,6 +108,7 @@ namespace SFR
 
         private void captureButton_Click(object sender, RoutedEventArgs e)
         {
+            timer.Start();
             isCapture = true;
             try
             {
