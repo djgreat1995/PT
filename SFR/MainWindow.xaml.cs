@@ -26,6 +26,7 @@ using System.IO;
 using Microsoft.Win32;
 using System.Threading;
 using Emgu.CV.Face;
+using System.Windows.Interop;
 
 namespace SFR
 {
@@ -59,10 +60,16 @@ namespace SFR
         Image<Bgr, Byte> currentFrame;
         List<Person> people;
         Font font;
+        int FPS = 1000;
 
         public MainWindow()
         {
             InitializeComponent();
+            timer = new DispatcherTimer();
+            
+
+            timer.Interval = TimeSpan.FromMilliseconds(1000 / FPS); //interwał 1 ms
+            timer.Start();
             people = new List<Person>();
             face = new CascadeClassifier("haarcascade_frontalface_default.xml");
             try
@@ -91,6 +98,37 @@ namespace SFR
                 MessageBox.Show("Exception " + e, "Triained faces load", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
 
+        }
+
+        void ComponentDispatcher_ThreadIdle(object sender, EventArgs e)
+        {
+            using (var currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>())
+            {
+                if (currentFrame != null)
+                {
+                    Image<Gray, Byte> grayFrame = currentFrame.Convert<Gray, byte>(); //konwertowanie do klatki w odcieniach szarości
+                    //Parametry metody DetectMultiScale: 
+                    //- grayscale image (grayFrame) - aktualny obrazek, z ktorego chcemy wykryc twarz.  
+                    //- scale factor (współczynnik skali) - musi być większy niż 1.0. Im bliżej do 1.0, tym więcej czasu
+                    //  zajmuje wykrycie twarzy, ale istnieje większa szansa, że znajdziemy twarz
+                    //- minimum number of nearest neighbors - im większa liczba, tym mniej otrzymamy fałszywych pozytywów
+                    //- max size (px) - pozostawic pusty 
+
+                    var faces = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty); //aktualna detekcja twarzy
+
+                    System.Drawing.Rectangle[] facesTab = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty); //tablica z wykrytymi twarzami
+
+                    foreach (var face in faces)
+                    {
+                        currentFrame.Draw(face, new Bgr(System.Drawing.Color.DarkBlue), 3); //podswietlenie twarzy za pomocą box'a rysowanego dookoła niej
+                        CvInvoke.PutText(currentFrame, faceLabel.Content.ToString(), new System.Drawing.Point(face.Location.X + 10, face.Location.Y - 10), Emgu.CV.CvEnum.FontFace.HersheyComplex, 1.0, new Bgr(0, 255, 0).MCvScalar);
+                    }
+
+                    countFacesLabel.Content = facesTab.Length.ToString(); //zliczanie twarzy
+                }
+                image.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(currentFrame); //przekazanie obrazu na komponent Image
+            }
+            cameraSettings();
         }
 
         void timer_Tick(object sender, EventArgs e)
@@ -136,14 +174,13 @@ namespace SFR
             {
                 MessageBox.Show(exception.Message);
             }
-
-            haarCascade = new CascadeClassifier(link + "/haarcascade_frontalface_default.xml"); //zestaw danych generowany z pliku
-            timer = new DispatcherTimer();
             timer.Tick += new EventHandler(timer_Tick);
             timer.Tick += new EventHandler(FrameGrabber);
-
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 1); //interwał 1 ms
-            timer.Start();
+            haarCascade = new CascadeClassifier(link + "/haarcascade_frontalface_default.xml"); //zestaw danych generowany z pliku
+            
+            //Application.Idle += new EventHandler(FrameGrabber);
+            //ComponentDispatcher.ThreadIdle += new System.EventHandler(ComponentDispatcher_ThreadIdle);
+            //ComponentDispatcher.ThreadIdle += new System.EventHandler(FrameGrabber);
             cameraInformation();
             capture.FlipHorizontal = !capture.FlipHorizontal; //obrot widoku kamery w poziomie
             for (int i = 0; i < NumLabels; i++)
@@ -335,7 +372,7 @@ namespace SFR
             if (actualFace() != null)
             {
                 var result = _faceRecognizer.Predict(actualFace());
-         
+                    
                 if (result.Distance < 3000)
                 {
                     faceLabel.Foreground = new SolidColorBrush(Colors.Green);
