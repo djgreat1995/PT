@@ -321,9 +321,9 @@ namespace SFR
         private Image<Gray, byte> actualFace()
         {
 
-            currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>();
+            currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>().Resize(300,250, Emgu.CV.CvEnum.Inter.Cubic);
             Image<Gray, Byte> grayFrame = currentFrame.Convert<Gray, byte>(); //konwertowanie do klatki w odcieniach szarości
-            var faces = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty); //aktualna detekcja twarzy
+            //var faces = haarCascade.DetectMultiScale(grayFrame, 1.1, 10, System.Drawing.Size.Empty); //aktualna detekcja twarzy
 
             //Face Detector
             System.Drawing.Rectangle[] facesDetected = face.DetectMultiScale(
@@ -332,13 +332,13 @@ namespace SFR
             10,
             new System.Drawing.Size(20, 20));
 
-            TrainedFace = null;
+            //TrainedFace = null;
             //Action for each element detected
             foreach (System.Drawing.Rectangle f in facesDetected)
             {
                 TrainedFace = currentFrame.Copy(f).Convert<Gray, byte>();
                 currentFrame.Draw(f, new Bgr(System.Drawing.Color.DarkBlue), 3); //podswietlenie twarzy za pomocą box'a rysowanego dookoła niej
-                CvInvoke.PutText(currentFrame, face_label, new System.Drawing.Point(f.Location.X + 10, f.Location.Y - 10), Emgu.CV.CvEnum.FontFace.HersheyComplex, 1.0, new Bgr(0, 255, 0).MCvScalar);
+                CvInvoke.PutText(currentFrame, face_label, new System.Drawing.Point(f.Location.X + 10, f.Location.Y - 10), Emgu.CV.CvEnum.FontFace.HersheyComplex, 0.5, new Bgr(0, 255, 0).MCvScalar);
                 break;
             }
 
