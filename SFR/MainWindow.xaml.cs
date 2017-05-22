@@ -53,7 +53,7 @@ namespace SFR
         string link = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
         //FaceRecognizer _faceRecognizer = new EigenFaceRecognizer(80,3000);
         // FaceRecognizer _faceRecognizer = new FisherFaceRecognizer(0, 2000);
-        FaceRecognizer _faceRecognizer = new LBPHFaceRecognizer(1, 10, 8, 8, 100);
+        FaceRecognizer _faceRecognizer = new LBPHFaceRecognizer(1, 8, 8, 8,100 );
         string _recognizerFilePath = "TrainedFaces/plik.yml";
         Image<Gray, byte>[] faceImages;
         int[] faceLabels;
@@ -303,7 +303,7 @@ namespace SFR
             if (actualFace() != null)
             {
                 var result = _faceRecognizer.Predict(actualFace());
-                if (result.Distance < 90)
+                if (result.Distance < 88)
                 {
                     name = Person.findNameByID(people, result.Label);
                     face_label = name;
@@ -313,15 +313,11 @@ namespace SFR
                 }
                 else
                 {
-                    LabelName.Foreground = new SolidColorBrush(Colors.Red);
                     face_label = "Person undetected";
                     LabelName.Content = "Person undetected";
                 }
                 
             }
-
-           
-             
         }
 
 
