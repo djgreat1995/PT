@@ -53,7 +53,7 @@ namespace SFR
         string link = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
         //FaceRecognizer _faceRecognizer = new EigenFaceRecognizer(80,3000);
         // FaceRecognizer _faceRecognizer = new FisherFaceRecognizer(0, 2000);
-        FaceRecognizer _faceRecognizer = new LBPHFaceRecognizer(1, 8, 8, 8,100 );
+        FaceRecognizer _faceRecognizer = new LBPHFaceRecognizer(1, 8, 8, 8,100);
         string _recognizerFilePath = "TrainedFaces/plik.yml";
         Image<Gray, byte>[] faceImages;
         int[] faceLabels;
