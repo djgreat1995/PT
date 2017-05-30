@@ -5,35 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SFR"
         mc:Ignorable="d"
-        Title="SFR" Height="484.877"
-        Width="922">
-    <Grid HorizontalAlignment="Left" Width="912">
-        <Image x:Name="image" HorizontalAlignment="Left" Height="261" Margin="31,32,0,0" VerticalAlignment="Top" Width="377" Stretch="Fill"/>
+        Title="SFR" Height="485"
+        Width="925" ResizeMode="NoResize" Icon="1496171729_camera.ico">
+    <Grid HorizontalAlignment="Left" Width="912" Background="AliceBlue">
+        <Image  x:Name="image" HorizontalAlignment="Left" Height="261" Margin="31,32,0,0" VerticalAlignment="Top" Width="377" Stretch="Fill"/>
         <Button x:Name="startCaptureButton" Content="Start capturing" HorizontalAlignment="Left" Margin="31,332,0,0" VerticalAlignment="Top" Width="377" Height="35" Click="captureButton_Click"/>
         <Button x:Name="stopCaptureButton" Content="Stop capturing" HorizontalAlignment="Left" Margin="31,380,0,0" VerticalAlignment="Top" Width="377" Height="36" Click="stopCaptureButton_Click"/>
-        <RichTextBox x:Name="richTextBox" Height="84" VerticalAlignment="Top" Margin="492,332,10,0">
+        <RichTextBox x:Name="richTextBox" Height="36" VerticalAlignment="Top" Margin="500,380,20,0">
             <FlowDocument>
                 <Paragraph>
                     <Run Text=""/>
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>
-        <Slider x:Name="brightnessSlider" HorizontalAlignment="Left" Margin="498,171,0,0" VerticalAlignment="Top" Height="24" Width="172" Minimum="1" Maximum="100" ToolTip="Set brightness value" SmallChange="1" ValueChanged="brightnessSlider_ValueChanged"/>
-        <Label x:Name="label" Content="Brightness:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="498,145,0,0" ToolTip="Set brightness value"/>
-        <Label x:Name="brightnessLabel" Content="Waiting for capturing..." HorizontalAlignment="Left" VerticalAlignment="Top" Margin="568,145,0,0"/>
-        <Button x:Name="button" Content="Reset settings" HorizontalAlignment="Left" Margin="492,295,0,0" VerticalAlignment="Top" Width="80" Click="button_Click"/>
-        <Slider x:Name="contrastSlider" HorizontalAlignment="Left" Margin="498,219,0,0" VerticalAlignment="Top" Height="24" Width="172" Minimum="1" Maximum="100" ToolTip="Set contrast value" SmallChange="1" ValueChanged="contrastSlider_ValueChanged"/>
-        <Label x:Name="label1" Content="Contrast:" HorizontalAlignment="Left" Margin="498,193,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="contrastLabel" Content="Waiting for capturing..." HorizontalAlignment="Left" Margin="568,193,0,0" VerticalAlignment="Top"/>
-        <Slider x:Name="sharpnessSlider" HorizontalAlignment="Left" Margin="498,267,0,0" VerticalAlignment="Top" Height="24" Width="172" Minimum="1" Maximum="100" ToolTip="Set sharpness value" SmallChange="1" ValueChanged="sharpnessSlider_ValueChanged"/>
+        <Slider x:Name="brightnessSlider" HorizontalAlignment="Left" Margin="498,156,0,0" VerticalAlignment="Top" Height="24" Width="200" Minimum="1" Maximum="100" ToolTip="Set brightness value" SmallChange="1" ValueChanged="brightnessSlider_ValueChanged"/>
+        <Label x:Name="label" Content="Brightness:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="500,125,0,0" ToolTip="Set brightness value"/>
+        <Label x:Name="brightnessLabel" Content="Waiting for capturing..." HorizontalAlignment="Left" VerticalAlignment="Top" Margin="568,125,0,0"/>
+        <Button x:Name="button" Content="Reset settings" HorizontalAlignment="Left" Margin="500,332,0,0" VerticalAlignment="Top" Width="392" Click="button_Click" Height="35"/>
+        <Slider x:Name="contrastSlider" HorizontalAlignment="Left" Margin="498,212,0,0" VerticalAlignment="Top" Height="24" Width="200" Minimum="1" Maximum="100" ToolTip="Set contrast value" SmallChange="1" ValueChanged="contrastSlider_ValueChanged"/>
+        <Label x:Name="label1" Content="Contrast:" HorizontalAlignment="Left" Margin="498,185,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="contrastLabel" Content="Waiting for capturing..." HorizontalAlignment="Left" Margin="568,185,0,0" VerticalAlignment="Top"/>
+        <Slider x:Name="sharpnessSlider" HorizontalAlignment="Left" Margin="498,272,0,0" VerticalAlignment="Top" Height="24" Width="200" Minimum="1" Maximum="100" ToolTip="Set sharpness value" SmallChange="1" ValueChanged="sharpnessSlider_ValueChanged"/>
         <Label x:Name="label3" Content="Sharpness:" HorizontalAlignment="Left" Margin="498,241,0,0" VerticalAlignment="Top"/>
         <Label x:Name="sharpnessLabel" Content="Waiting for capturing..." HorizontalAlignment="Left" Margin="568,241,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="takePhotoBtn" Content="Take photo" HorizontalAlignment="Left" Margin="802,295,0,0" VerticalAlignment="Top" Width="80" Click="takePhotoBtn_Click"/>
-        <Image x:Name="imageBox" HorizontalAlignment="Left" Height="124" Margin="762,145,0,0" VerticalAlignment="Top" Width="130"/>
-        <Button x:Name="savePhoto" Content="Save photo" HorizontalAlignment="Left" Margin="756,83,0,0" VerticalAlignment="Top" Width="96" Click="savePhoto_Click" RenderTransformOrigin="1.425,-6.25"/>
-        <Label x:Name="capturedPhoto" Content="Captured Photo:" HorizontalAlignment="Left" Margin="756,114,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="nameTextBox" HorizontalAlignment="Left" Height="23" Margin="498,83,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" RenderTransformOrigin="0.133,0.565"/>
-        <Label x:Name="nameLabel" Content="Student's name:" HorizontalAlignment="Left" Margin="492,52,0,0" VerticalAlignment="Top" Width="100"/>
+        <Image x:Name="imageBox" HorizontalAlignment="Left" Height="133" Margin="756,160,0,0" VerticalAlignment="Top" Width="130"/>
+        <Button x:Name="savePhoto" Content="Save photo" HorizontalAlignment="Left" Margin="756,63,0,0" VerticalAlignment="Top" Width="136" Click="savePhoto_Click" RenderTransformOrigin="1.425,-6.25" Height="32"/>
+        <Label x:Name="capturedPhoto" Content="Captured Photo:" HorizontalAlignment="Left" Margin="756,125,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="nameTextBox" HorizontalAlignment="Left" Height="32" Margin="500,63,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="198" RenderTransformOrigin="0.133,0.565" TextChanged="validation"/>
+        <Label x:Name="nameLabel" Content="Student's name:" HorizontalAlignment="Left" Margin="498,32,0,0" VerticalAlignment="Top" Width="94" RenderTransformOrigin="0.436,0"/>
         <Label x:Name="labelDistance"  HorizontalAlignment="Left" Margin="31,0,0,0" VerticalAlignment="Top" Width="207" Height="27"/>
         <Label x:Name="LabelName" FontWeight="Bold" FontSize="16" HorizontalAlignment="Left" Margin="31,293,0,0" VerticalAlignment="Top" Width="377" Height="34"/>
 

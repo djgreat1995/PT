@@ -60,13 +60,13 @@ namespace SFR
         Image<Bgr, Byte> currentFrame;
         List<Person> people;
         public string face_label ="";
-
+        
 
         public MainWindow()
         {
             InitializeComponent();
+            savePhoto.IsEnabled = false;
             timer = new DispatcherTimer();
-
 
             timer.Interval = TimeSpan.FromMilliseconds(1); //interwał 1 ms
         
@@ -216,18 +216,6 @@ namespace SFR
             }
         }
 
-        //Pobranie klatki
-        private void takePhotoBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (isCapture == true)
-            {
-                using (var currentFrame = capture.QueryFrame().ToImage<Bgr, Byte>())
-                {
-                    imageBox.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(currentFrame);
-                }
-            }
-        }
-
         private void savePhoto_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -353,6 +341,14 @@ namespace SFR
                 return TrainedFace.Resize(100, 100, Emgu.CV.CvEnum.Inter.Cubic);
             else
                 return null;
+        }
+
+        private void validation(object sender, RoutedEventArgs e)
+        {
+            if (nameTextBox.Text.Length >= 1)
+                savePhoto.IsEnabled = true;
+            else
+                savePhoto.IsEnabled = false;
         }
 
     }
